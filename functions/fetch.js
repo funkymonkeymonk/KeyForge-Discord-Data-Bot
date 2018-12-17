@@ -1,0 +1,69 @@
+const cards = require('../data/cards');
+const new_cards = require('../data/new_cards');
+const all_cards = require('../data/all_cards');
+const axios = require('axios');
+const fs = require('fs');
+const _ = require('lodash');
+const path = require('../config').path;
+const deckSearchAPI = require('../config').deckSearchAPI;
+const deckADHDAPI = require('../config').deckADHDAPI;
+const asyncForEach = require('./basic').asyncForEach;
+
+const fetchDeck = (name) => {
+	return new Promise(resolve => {
+		axios.get(deckSearchAPI + '?search=' + name)
+			.then(async response => {
+				if (response.data) {
+					if (response.data.data) {
+						if (response.data.data[0]) {
+							let deck = response.data.data[0];
+							let cards = [];
+							await asyncForEach(deck.cards, async card => {
+								let obj = all_cards.find(o => o.id === card);
+								if (!obj) obj = await fetchUnknownCard(card, deck.id).catch(console.error);
+								cards.push(obj);
+							});
+							resolve([deck, cards]);
+						} else resolve([false, false]);
+					} else resolve([false, false]);
+				} else resolve([false, false]);
+			}).catch(console.error);
+	});
+};
+
+const fetchCard = (name) => {
+	return cards.find(card => {
+		let title = card.card_title.toLowerCase();
+		return title === name || title.startsWith(name) || title.includes(name);
+	});
+};
+
+const fetchUnknownCard = async (cardId, deckId) => {
+	console.log(`${cardId} not found, fetching from the man`);
+	let fetchedCards = await axios.get(`${deckSearchAPI}${deckId}/?links=cards`);
+	let card = fetchedCards.data._linked.cards.find(o => o.id === cardId);
+	if (!new_cards.find(o => o.id === cardId)) {
+		fs.writeFile(`${path}/data/new_cards.json`, JSON.stringify(new_cards.concat(card)), (err) => {
+			if (err) throw err;
+			console.log(`${cardId} has been added to new_cards.json`);
+		});
+	}
+	return card;
+};
+
+const fetchDeckADHD = (deckID) => {
+	return new Promise(resolve => {
+		const aveADHD = {a_rating: 17.57, b_rating: 18.28, e_rating: 7.58, c_rating: 5.51}, arr = ['a_rating', 'b_rating', 'c_rating', 'e_rating'];
+		axios.get(`${deckADHDAPI}${deckID}.json`)
+			.then(response => {
+				if (response.data) {
+					resolve(`${arr.map(type => `${_.toUpper(type.slice(0, 1))}: ${response.data[type].toFixed(2)} (${(response.data[type] - aveADHD[type]).toFixed(2)})`).join(' • ')}`);
+				} else resolve(false);
+			}).catch(console.error)
+	});
+};
+
+exports.fetchDeck = fetchDeck;
+exports.fetchCard = fetchCard;
+exports.fetchDeckADHD = fetchDeckADHD;
+exports.fetchUnknownCard = fetchUnknownCard;
