@@ -7,7 +7,7 @@ const card = async (msg, params) => {
 	const data = fetchCard(params.join(' '));
 	const embed = new Discord.RichEmbed();
 	if (data) {
-		const title = data.card_title.replace(' ', '_') + '.png';
+		const title = `${data.card_number}.png`;
 		const attachment = new Discord.Attachment(`${path}card_images/${data.card_number}.png`, title);
 		embed.setColor('031763')
 			.setTitle(`${data.card_title} #${data.card_number}`)
