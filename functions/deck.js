@@ -19,7 +19,8 @@ const deck = async (msg, params, client) => {
 			.setTitle(deck.name)
 			.addField(houses, `[Official](https://www.keyforgegame.com/deck-details/${deck.id}?powered_by=archonMatrixDiscord) **•** [KeyForge Compendium](https://keyforge-compendium.com/decks/${deck.id}?powered_by=archonMatrixDiscord)`)
 			.addField(deckADHD ? deckADHD : `ADHD unavailable, register https://keyforge-compendium.com/decks/${deck.id}?powered_by=archonMatrixDiscord`, Object.keys(cardStats.card_type).map(type => `${type}: ${cardStats.card_type[type]}`).join(' **•** '))
-			.addField(rarity + ', ' + mavericks, `Data fetch ${new Date()}`);
+			.addField(rarity + ', ' + mavericks, `Data fetch ${new Date()}`)
+			.setThumbnail(`https://keyforge-compendium.com/decks/${deck.id}/image.png`)
 	} else embed.setColor('FF0000').setDescription(`Deck - ${params.join(' ')}: not found!`);
 
 	main.sendMessage(msg, {embed});

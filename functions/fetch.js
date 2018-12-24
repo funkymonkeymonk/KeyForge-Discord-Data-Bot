@@ -10,9 +10,8 @@ const kfcAPI = require('../config').kfcAPI;
 const asyncForEach = require('./basic').asyncForEach;
 
 const fetchDeck = (name) => {
-	name = encodeURI(name);
 	return new Promise(resolve => {
-		axios.get(deckSearchAPI + '?search=' + name)
+		axios.get(encodeURI(deckSearchAPI + '?search=' + name))
 			.then(async response => {
 				if (response.data) {
 					if (response.data.data) {
@@ -54,11 +53,11 @@ const fetchUnknownCard = async (cardId, deckId) => {
 
 const fetchDeckADHD = (deckID) => {
 	return new Promise(resolve => {
-		const aveADHD = {a_rating: 17.79, b_rating: 17.70, c_rating: 5.26, e_rating: 6.92}, arr = ['a_rating', 'b_rating', 'c_rating', 'e_rating'];
+		const aveADHD = {a_rating: 17.79, b_rating: 17.70, c_rating: 5.26, e_rating: 6.92};
 		axios.get(`${kfcAPI}decks/${deckID}.json`)
 			.then(response => {
 				if (response.data) {
-					resolve(`${arr.map(type => `${_.toUpper(type.slice(0, 1))}: ${response.data[type].toFixed(2)} (${(response.data[type] - aveADHD[type]).toFixed(2)})`).join(' • ')}`);
+					resolve(`${Object.keys(aveADHD).sort().map(type => `${_.toUpper(type.slice(0, 1))}: ${response.data[type].toFixed(2)} (${(response.data[type] - aveADHD[type]).toFixed(2)})`).join(' • ')}`);
 				} else resolve(false);
 			}).catch(console.error)
 	});
