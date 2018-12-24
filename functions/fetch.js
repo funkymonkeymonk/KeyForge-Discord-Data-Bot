@@ -10,6 +10,7 @@ const kfcAPI = require('../config').kfcAPI;
 const asyncForEach = require('./basic').asyncForEach;
 
 const fetchDeck = (name) => {
+	name = encodeURI(name);
 	return new Promise(resolve => {
 		axios.get(deckSearchAPI + '?search=' + name)
 			.then(async response => {
