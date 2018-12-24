@@ -20,6 +20,8 @@ const help = (msg, params) => {
 				.addField(`${prefix}randomhand deckName`, 'Draws 6 Random cards from selected deck.')
 				.addField(`${prefix}rule ruleName`, 'Searches and displays Rule.')
 				.addField(`${prefix}invite`, 'Get the invite link.')
+				.addField(`${prefix}version`, 'Get the version number of current bot.')
+				.addField(`${prefix}faq cardName searchTerm`, 'Get any FAQ of the specified card containing specific term.')
 				.addField(`[card name 1] [card name 2]`, 'Searches and displays card as an single image (up to 5) [] required.')
 				.addField('More Information', 'For more information or help join the [KeyForge Lounge](https://discordapp.com/invite/PcTGhr9)')
 				.addField('KeyForge by Fantasy Flight Games', `[KeyForge](https://www.fantasyflightgames.com/en/products/keyforge/?powered_by=archonMatrixDiscord)`);

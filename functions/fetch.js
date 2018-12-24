@@ -6,7 +6,7 @@ const fs = require('fs');
 const _ = require('lodash');
 const path = require('../config').path;
 const deckSearchAPI = require('../config').deckSearchAPI;
-const deckADHDAPI = require('../config').deckADHDAPI;
+const kfcAPI = require('../config').kfcAPI;
 const asyncForEach = require('./basic').asyncForEach;
 
 const fetchDeck = (name) => {
@@ -53,8 +53,8 @@ const fetchUnknownCard = async (cardId, deckId) => {
 
 const fetchDeckADHD = (deckID) => {
 	return new Promise(resolve => {
-		const aveADHD = {a_rating: 17.57, b_rating: 18.28, e_rating: 7.58, c_rating: 5.51}, arr = ['a_rating', 'b_rating', 'c_rating', 'e_rating'];
-		axios.get(`${deckADHDAPI}${deckID}.json`)
+		const aveADHD = {a_rating: 17.79, b_rating: 17.70, c_rating: 5.26, e_rating: 6.92}, arr = ['a_rating', 'b_rating', 'c_rating', 'e_rating'];
+		axios.get(`${kfcAPI}decks/${deckID}.json`)
 			.then(response => {
 				if (response.data) {
 					resolve(`${arr.map(type => `${_.toUpper(type.slice(0, 1))}: ${response.data[type].toFixed(2)} (${(response.data[type] - aveADHD[type]).toFixed(2)})`).join(' • ')}`);
@@ -63,7 +63,25 @@ const fetchDeckADHD = (deckID) => {
 	});
 };
 
+const fetchFAQ = (card_number, search) => {
+	return new Promise(resolve => {
+		axios.get(`${kfcAPI}cards/${card_number}.json`)
+			.then(response => {
+				if (response.data) {
+					if (response.data.faqs) {
+						const final =  response.data.faqs.find(faq => {
+							let question = faq.question.toLowerCase();
+							return question === search || question.startsWith(search) || question.includes(search);
+						});
+						resolve(final);
+					} else resolve(false);
+				} else resolve(false);
+			}).catch(console.error)
+	});
+};
+
 exports.fetchDeck = fetchDeck;
 exports.fetchCard = fetchCard;
 exports.fetchDeckADHD = fetchDeckADHD;
+exports.fetchFAQ = fetchFAQ;
 exports.fetchUnknownCard = fetchUnknownCard;

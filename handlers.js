@@ -7,19 +7,19 @@ const onMessage = (msg, client) => {
 
 	// This isn't a command since it has no prefix:
 	if (!msg.content.includes(commandPrefix) && !msg.content.match(/[\[\]{}]/g)) return;
-	let params = [], commandName;
+	let params = [], commandName, message = msg.content.toLowerCase();
 
-	if (msg.content.includes(commandPrefix)) {
-		if (msg.content.startsWith(commandPrefix)) params = msg.content.substr(1).split(' ');
-		else params = msg.content.split(commandPrefix)[1].split(' ');
+	if (message.includes(commandPrefix)) {
+		if (message.startsWith(commandPrefix)) params = message.substr(1).split(' ');
+		else params = message.split(commandPrefix)[1].split(' ');
 		commandName = params[0].toLowerCase();
 		params = params.splice(1);
-	} else if (msg.content.match(/[\[\]]/g)) {
-		let parse = msg.content.split('[');
+	} else if (message.match(/[\[\]]/g)) {
+		let parse = message.split('[');
 		parse.forEach(sub => sub.includes(']') && params.push(sub.split(']')[0]));
 		commandName = 'brackets';
-	} else if (msg.content.match(/[{}]/g)) {
-		let parse = msg.content.split('{');
+	} else if (message.match(/[{}]/g)) {
+		let parse = message.split('{');
 		parse.forEach(sub => sub.includes('}') && params.push(sub.split('}')[0]));
 		commandName = 'decks';
 	}
@@ -31,8 +31,15 @@ const onMessage = (msg, client) => {
 		case 'd':
 			commandName = 'deck';
 			break;
+		case 'f':
+			commandName = 'faq';
+			break;
 		case 'r':
 			commandName = 'rule';
+			break;
+		case 'v':
+		case 'ver':
+			commandName = 'version';
 			break;
 		case 'rh':
 		case 'random':
