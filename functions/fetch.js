@@ -70,9 +70,10 @@ const fetchFAQ = (card_number, search) => {
 			.then(response => {
 				if (response.data) {
 					if (response.data.faqs) {
-						const final =  response.data.faqs.find(faq => {
+						const final = [];
+						response.data.faqs.forEach(faq => {
 							let question = faq.question.toLowerCase();
-							return question === search || question.startsWith(search) || question.includes(search);
+							if (question === search || question.startsWith(search) || question.includes(search)) final.push(faq);
 						});
 						resolve(final);
 					} else resolve(false);
