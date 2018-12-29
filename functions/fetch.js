@@ -53,13 +53,13 @@ const fetchUnknownCard = async (cardId, deckId) => {
 
 const fetchDeckADHD = (deckID) => {
 	return new Promise(resolve => {
-		const aveADHD = {a_rating: 17.79, b_rating: 17.70, c_rating: 5.26, e_rating: 6.92};
+		const aveADHD = {a_rating: 17.57, b_rating: 18.28, e_rating: 7.58, c_rating: 5.51};
 		axios.get(`${kfcAPI}decks/${deckID}.json`)
 			.then(response => {
 				if (response.data) {
 					resolve(`${Object.keys(aveADHD).sort().map(type => `${_.toUpper(type.slice(0, 1))}: ${response.data[type].toFixed(2)} (${(response.data[type] - aveADHD[type]).toFixed(2)})`).join(' • ')}`);
 				} else resolve(false);
-			}).catch(console.error)
+			}).catch(console.error);
 	});
 };
 
