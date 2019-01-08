@@ -34,7 +34,7 @@ const fetchDeck = (name) => {
 const fetchCard = (name) => {
 	return cards.find(card => {
 		let title = card.card_title.toLowerCase();
-		return title === name || title.startsWith(name) || title.includes(name);
+		return title === name || title.startsWith(name) || title.includes(name) || card.card_number === +name;
 	});
 };
 
