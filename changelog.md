@@ -1,5 +1,5 @@
 #1.0.8
-    spanish, italian, french, getman support
+    spanish, italian, french, german support
 #1.0.6
     updated invite params
 #1.0.5
