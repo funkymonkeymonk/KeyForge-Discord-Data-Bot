@@ -8,7 +8,7 @@ const card = async (msg, params) => {
 	const embed = new Discord.RichEmbed();
 	if (data) {
 		const title = `${data.card_number}.png`;
-		const attachment = new Discord.Attachment(`${path}card_images/${data.card_number}.png`, title);
+		const attachment = new Discord.Attachment(`${path}card_images/${data.language}/${data.card_number}.png`, title);
 		embed.setColor('031763')
 			.setDescription(`**[${data.card_title} #${data.card_number}](https://keyforge-compendium.com/cards/${data.card_number}?powered_by=archonMatrixDiscord)**`)
 			.attachFile(attachment)

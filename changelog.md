@@ -1,5 +1,5 @@
-#1.0.7
-    card number search
+#1.0.8
+    spanish, italian, french, getman support
 #1.0.6
     updated invite params
 #1.0.5

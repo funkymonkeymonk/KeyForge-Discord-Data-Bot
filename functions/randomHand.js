@@ -14,7 +14,7 @@ const randomHand = async (msg, params) => {
 			if (randomNumbers.indexOf(r) === -1) randomNumbers.push(r);
 		}
 
-		randomNumbers.forEach(number => randomCards.push(cards[number]));
+		randomNumbers.forEach(number => randomCards.push({...cards[number], language: 'en'}));
 
 		//build Title
 		const name = randomCards.map(card => `${card.card_number}`).join('_') + '.png';

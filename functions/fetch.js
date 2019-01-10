@@ -1,4 +1,4 @@
-const cards = require('../data/cards');
+const cards = require('../data/').cards;
 const new_cards = require('../data/new_cards');
 const all_cards = require('../data/all_cards');
 const axios = require('axios');
@@ -32,10 +32,15 @@ const fetchDeck = (name) => {
 };
 
 const fetchCard = (name) => {
-	return cards.find(card => {
-		let title = card.card_title.toLowerCase();
-		return title === name || title.startsWith(name) || title.includes(name) || card.card_number === +name;
-	});
+	let final;
+	final = cards.find(card => card.card_title.toLowerCase() === name);
+	if (final) return final;
+	final = cards.find(card => card.card_title.toLowerCase().startsWith(name));
+	if (final) return final;
+	final = cards.find(card => card.card_title.toLowerCase().endsWith(name));
+	if (final) return final;
+	final = cards.find(card => card.card_number === +name);
+	return final;
 };
 
 const fetchUnknownCard = async (cardId, deckId) => {
