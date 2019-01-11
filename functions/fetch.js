@@ -1,4 +1,4 @@
-const cards = require('../data/').cards;
+const cards = require('../data/');
 const new_cards = require('../data/new_cards');
 const all_cards = require('../data/all_cards');
 const axios = require('axios');
@@ -31,15 +31,15 @@ const fetchDeck = (name) => {
 	});
 };
 
-const fetchCard = (name) => {
+const fetchCard = (name, lang) => {
 	let final;
-	final = cards.find(card => card.card_title.toLowerCase() === name);
+	final = cards[lang].find(card => card.card_title.toLowerCase() === name);
 	if (final) return final;
-	final = cards.find(card => card.card_title.toLowerCase().startsWith(name));
+	final = cards[lang].find(card => card.card_title.toLowerCase().startsWith(name));
 	if (final) return final;
-	final = cards.find(card => card.card_title.toLowerCase().endsWith(name));
+	final = cards[lang].find(card => card.card_title.toLowerCase().endsWith(name));
 	if (final) return final;
-	final = cards.find(card => card.card_number === +name);
+	final = cards[lang].find(card => card.card_number === +name);
 	return final;
 };
 

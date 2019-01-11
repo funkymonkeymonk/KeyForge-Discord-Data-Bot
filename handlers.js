@@ -7,7 +7,12 @@ const onMessage = (msg, client) => {
 
 	// This isn't a command since it has no prefix:
 	if (!msg.content.includes(commandPrefix) && !msg.content.match(/[\[\]{}]/g)) return;
-	let params = [], commandName, message = msg.content.toLowerCase();
+	let params = [], commandName, lang = 'en', message = msg.content.toLowerCase();
+
+	if (message.split(' ').some(a => a.includes('-'))) {
+		lang = message.split(' ').filter(a => a.includes('-'))[0].replace('-', '');
+		message = message.split(' ').filter(a => !a.includes('-')).join(' ');
+	}
 
 	if (message.includes(commandPrefix)) {
 		if (message.startsWith(commandPrefix)) params = message.substr(1).split(' ');
@@ -21,7 +26,7 @@ const onMessage = (msg, client) => {
 	} else if (message.match(/[{}]/g)) {
 		let parse = message.split('{');
 		parse.forEach(sub => sub.includes('}') && params.push(sub.split('}')[0]));
-		commandName = 'decks';
+		commandName = 'deck';
 	}
 
 	switch (commandName) {
@@ -53,7 +58,7 @@ const onMessage = (msg, client) => {
 	// If the command is known, let's execute it:
 	if (commandName in knownCommands) {
 		console.log(`${msg.author.username}, ${commandName}, ${params}, ${new Date()}`);
-		knownCommands[commandName](msg, params, client);
+		knownCommands[commandName](msg, params, client, lang);
 	}
 
 };

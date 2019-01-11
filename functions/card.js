@@ -3,8 +3,8 @@ const Discord = require('discord.js');
 const fetchCard = require('./fetch').fetchCard;
 const path = require('../config').path;
 
-const card = async (msg, params) => {
-	const data = fetchCard(params.join(' '));
+const card = async (msg, params, client, lang) => {
+	const data = fetchCard(params.join(' '), lang);
 	const embed = new Discord.RichEmbed();
 	if (data) {
 		const title = `${data.card_number}.png`;

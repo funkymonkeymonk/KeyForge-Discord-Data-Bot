@@ -15,14 +15,14 @@ const help = (msg, params) => {
 				.addField('E: Efficiency', 'Looser metric that applies to card effects that will allow you to play or use more cards in a turn. Archiving your cards, drawing cards, and activating cards from other factions all play in. It also covers effects that limit your opponents ability to play cards.');
 			break;
 		default:
-			embed.addField(`${prefix}card cardName`, 'Searches and displays Card.')
+			embed.addField(`${prefix}card cardName/card# (-en/-es/-it/-de/-fr)`, 'Searches and displays Card. Add -lang tag to specify language.')
 				.addField(`${prefix}deck deckName`, 'Searches and displays Deck.')
 				.addField(`${prefix}randomhand deckName`, 'Draws 6 Random cards from selected deck.')
 				.addField(`${prefix}rule ruleName`, 'Searches and displays Rule.')
 				.addField(`${prefix}invite`, 'Get the invite link.')
 				.addField(`${prefix}version`, 'Get the version number of current bot.')
 				.addField(`${prefix}faq cardName searchTerm`, 'Get any FAQ of the specified card containing specific term.')
-				.addField(`[card name 1] [card name 2]`, 'Searches and displays card as an single image (up to 5) [] required.')
+				.addField(`[card name 1] [card name 2] (-en/-es/-it/-de/-fr)`, 'Searches and displays card as an single image (up to 5) [] required. Add -lang tag to specify language.')
 				.addField('More Information', 'For more information or help join the [KeyForge Lounge](https://discordapp.com/invite/PcTGhr9)')
 				.addField('KeyForge by Fantasy Flight Games', `[KeyForge](https://www.fantasyflightgames.com/en/products/keyforge/?powered_by=archonMatrixDiscord)`);
 			break;

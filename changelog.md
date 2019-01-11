@@ -1,3 +1,5 @@
+#1.0.9
+    added -es, -en, -it, -de tags 
 #1.0.8
     spanish, italian, french, german support
 #1.0.6

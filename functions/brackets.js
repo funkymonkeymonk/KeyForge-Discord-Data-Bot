@@ -4,12 +4,12 @@ const fetchCard = require('./fetch').fetchCard;
 const asyncForEach = require('./basic').asyncForEach;
 const buildAttachment = require('./buildAttachment').buildAttachment;
 
-const brackets = async (msg, params) => {
+const brackets = async (msg, params, client, lang) => {
 	params = params.slice(0, 5);
 
 	//fetch cards data
 	let data = [], error = ``;
-	await asyncForEach(params, async card => data.push(fetchCard(card)));
+	await asyncForEach(params, async card => data.push(fetchCard(card, lang)));
 	data.forEach((val, index) => !val && (error += `\n${params[index]} not found!`));
 	data = data.filter(Boolean);
 	const embed = new Discord.RichEmbed();
