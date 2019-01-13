@@ -9,9 +9,9 @@ const onMessage = (msg, client) => {
 	if (!msg.content.includes(commandPrefix) && !msg.content.match(/[\[\]{}]/g)) return;
 	let params = [], commandName, lang = 'en', message = msg.content.toLowerCase();
 
-	if (message.split(' ').some(a => a.includes('-'))) {
-		lang = message.split(' ').filter(a => a.includes('-'))[0].replace('-', '');
-		message = message.split(' ').filter(a => !a.includes('-')).join(' ');
+	if (message.split(' ').some(a => a.startsWith('-'))) {
+		lang = message.split(' ').filter(a => a.startsWith('-'))[0].replace('-', '');
+		message = message.split(' ').filter(a => !a.startsWith('-')).join(' ');
 	}
 
 	if (message.includes(commandPrefix)) {

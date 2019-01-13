@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const fetchDeck = require('./fetch').fetchDeck;
 const buildAttachment = require('./buildAttachment').buildAttachment;
 
-const randomHand = async (msg, params) => {
+const randomHand = async (msg, params, client, lang) => {
 	let [deck, cards] = await fetchDeck(params.join('+'));
 	const embed = new Discord.RichEmbed();
 	if (deck) {
@@ -14,11 +14,11 @@ const randomHand = async (msg, params) => {
 			if (randomNumbers.indexOf(r) === -1) randomNumbers.push(r);
 		}
 
-		randomNumbers.forEach(number => randomCards.push({...cards[number], language: 'en'}));
+		randomNumbers.forEach(number => randomCards.push(cards[number]));
 
 		//build Title
 		const name = randomCards.map(card => `${card.card_number}`).join('_') + '.png';
-		const attachment = await buildAttachment(randomCards, name);
+		const attachment = await buildAttachment(randomCards, name, lang);
 
 		embed.setColor('007f00')
 			.setTitle('Random hand from ' + deck.name)

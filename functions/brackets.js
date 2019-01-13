@@ -6,7 +6,6 @@ const buildAttachment = require('./buildAttachment').buildAttachment;
 
 const brackets = async (msg, params, client, lang) => {
 	params = params.slice(0, 5);
-
 	//fetch cards data
 	let data = [], error = ``;
 	await asyncForEach(params, async card => data.push(fetchCard(card, lang)));
@@ -15,7 +14,7 @@ const brackets = async (msg, params, client, lang) => {
 	const embed = new Discord.RichEmbed();
 	if (0 < data.length) {
 		const name = data.map(card => `${card.card_number}`).join('_') + '.png';
-		const attachment = await buildAttachment(data, name);
+		const attachment = await buildAttachment(data, name, lang);
 		embed.setColor('4B0082')
 			.setDescription(`${data.map(card => `**[${card.card_title} #${card.card_number}](https://keyforge-compendium.com/cards/${card.card_number}?powered_by=archonMatrixDiscord)**`).join(', ')} ${error}`)
 			.attachFile(attachment)
