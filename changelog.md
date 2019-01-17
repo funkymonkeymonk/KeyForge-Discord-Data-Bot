@@ -1,5 +1,5 @@
-#1.0.10
-    fixed brackets and faq
+#1.0.11
+    rules 1.2 update
 #1.0.9
     added -es, -en, -it, -de tags 
 #1.0.8
