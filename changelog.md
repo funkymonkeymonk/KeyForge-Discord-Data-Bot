@@ -1,3 +1,5 @@
+#1.1.0
+    removed asyncforeach for map() and Promise.all()
 #1.0.11
     rules 1.2 update
 #1.0.9

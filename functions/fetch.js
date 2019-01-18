@@ -7,26 +7,18 @@ const _ = require('lodash');
 const path = require('../config').path;
 const deckSearchAPI = require('../config').deckSearchAPI;
 const kfcAPI = require('../config').kfcAPI;
-const asyncForEach = require('./basic').asyncForEach;
 
 const fetchDeck = (name) => {
 	return new Promise(resolve => {
 		axios.get(encodeURI(deckSearchAPI + '?search=' + name))
 			.then(async response => {
-				if (response.data) {
-					if (response.data.data) {
-						if (response.data.data[0]) {
-							let deck = response.data.data[0];
-							let cards = [];
-							await asyncForEach(deck.cards, async card => {
-								let obj = all_cards.find(o => o.id === card);
-								if (!obj) obj = await fetchUnknownCard(card, deck.id).catch(console.error);
-								cards.push(obj);
-							});
-							resolve([deck, cards]);
-						} else resolve([false, false]);
-					} else resolve([false, false]);
-				} else resolve([false, false]);
+				const deck = _.get(response, 'data.data[0]', false);
+				const cardList = _.get(deck, 'cards', []);
+				const cards = cardList.map(async card => {
+					const data = all_cards.find(o => o.id === card);
+					return data ? data : await fetchUnknownCard(card, deck.id).catch(console.error);
+				});
+				Promise.all(cards).then(finalCards => resolve([deck, finalCards]));
 			}).catch(console.error);
 	});
 };
