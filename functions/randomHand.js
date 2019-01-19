@@ -2,19 +2,14 @@ const main = require('../index');
 const Discord = require('discord.js');
 const fetchDeck = require('./fetch').fetchDeck;
 const buildAttachment = require('./buildAttachment').buildAttachment;
+const _ = require('lodash');
 
 const randomHand = async (msg, params, client, lang) => {
 	let [deck, cards] = await fetchDeck(params.join('+'));
 	const embed = new Discord.RichEmbed();
 	if (deck) {
 		//grab 6 random cards
-		let randomNumbers = [], randomCards = [];
-		while (randomNumbers.length < 6) {
-			let r = Math.floor(Math.random() * cards.length);
-			if (randomNumbers.indexOf(r) === -1) randomNumbers.push(r);
-		}
-
-		randomNumbers.forEach(number => randomCards.push(cards[number]));
+		const randomCards = [...Array(6)].map(() => _.pullAt(cards, Math.floor(Math.random() * cards.length))[0]).sort((a, b) => a.card_number - b.card_number);
 
 		//build Title
 		const name = randomCards.map(card => `${card.card_number}`).join('_') + '.png';

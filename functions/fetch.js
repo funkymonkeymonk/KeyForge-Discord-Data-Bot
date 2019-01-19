@@ -37,8 +37,8 @@ const fetchCard = (name, lang) => {
 
 const fetchUnknownCard = async (cardId, deckId) => {
 	console.log(`${cardId} not found, fetching from the man`);
-	let fetchedCards = await axios.get(`${deckSearchAPI}${deckId}/?links=cards`);
-	let card = fetchedCards.data._linked.cards.find(o => o.id === cardId);
+	const fetchedCards = await axios.get(`${deckSearchAPI}${deckId}/?links=cards`);
+	const card = fetchedCards.data._linked.cards.find(o => o.id === cardId);
 	if (!new_cards.find(o => o.id === cardId)) {
 		fs.writeFile(`${path}/data/new_cards.json`, JSON.stringify(new_cards.concat(card)), (err) => {
 			if (err) throw err;
@@ -64,16 +64,12 @@ const fetchFAQ = (card_number, search) => {
 	return new Promise(resolve => {
 		axios.get(`${kfcAPI}cards/${card_number}.json`)
 			.then(response => {
-				if (response.data) {
-					if (response.data.faqs) {
-						const final = [];
-						response.data.faqs.forEach(faq => {
-							let question = faq.question.toLowerCase();
-							if (question === search || question.startsWith(search) || question.includes(search)) final.push(faq);
-						});
-						resolve(final);
-					} else resolve(false);
-				} else resolve(false);
+				const data = _.get(response, 'data.faqs', []),
+					final = data.map(faq => {
+						const question = faq.question.toLowerCase();
+						if (question === search || question.startsWith(search) || question.includes(search)) return faq;
+					}).filter(Boolean);
+				resolve(final);
 			}).catch(console.error)
 	});
 };

@@ -9,13 +9,13 @@ const faq = async (msg, params, client, lang) => {
 	const data = fetchCard(params.length > 1 ? params.slice(0, -1).join(' ') : params.join(' '), lang);
 	const embed = new Discord.RichEmbed();
 	if (data) {
-		let link = `https://keyforge-compendium.com/cards/${data.card_number}?powered_by=archonMatrixDiscord`;
-		const searchTerm = params.length > 1 ? params.slice(-1).join() : '';
-		const faqs = await fetchFAQ(data.card_number, searchTerm);
-		const house = await emoji(data.house.toLowerCase(), client);
-		const rarity = await emoji(data.rarity.toLowerCase(), client);
-		const title = `${data.card_number}.png`;
-		const attachment = new Discord.Attachment(`${path}card_images/${lang}/${data.card_number}.png`, title);
+		const link = `https://keyforge-compendium.com/cards/${data.card_number}?powered_by=archonMatrixDiscord`,
+			searchTerm = params.length > 1 ? params.slice(-1).join() : '',
+			faqs = await fetchFAQ(data.card_number, searchTerm),
+			house = await emoji(data.house.toLowerCase(), client),
+			rarity = await emoji(data.rarity.toLowerCase(), client),
+			title = `${data.card_number}.png`,
+			attachment = new Discord.Attachment(`${path}card_images/${lang}/${data.card_number}.png`, title);
 		embed.setColor('ffa500')
 			.setTitle(`${data.card_title} #${data.card_number}`)
 			.attachFile(attachment)
