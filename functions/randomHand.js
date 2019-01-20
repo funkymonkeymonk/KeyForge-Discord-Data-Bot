@@ -9,7 +9,7 @@ const randomHand = async (msg, params, client, lang) => {
 	const embed = new Discord.RichEmbed();
 	if (deck) {
 		//grab 6 random cards
-		const randomCards = [...Array(6)].map(() => _.pullAt(cards, Math.floor(Math.random() * cards.length))[0]).sort((a, b) => a.card_number - b.card_number);
+		const randomCards = [...Array(6)].map(() => _.pullAt(cards.sort(() => Math.random() - 0.5), _.random(cards.length - 1))[0]).sort((a, b) => a.card_number - b.card_number);
 
 		//build Title
 		const name = randomCards.map(card => `${card.card_number}`).join('_') + '.png';

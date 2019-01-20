@@ -16,7 +16,7 @@ const deck = async (msg, params, client) => {
 
 		embed.setColor('178110')
 			.setTitle(deck.name)
-			.addField(houses, `[Official](https://www.keyforgegame.com/deck-details/${deck.id}?powered_by=archonMatrixDiscord) **•** [KeyForge Compendium](https://keyforge-compendium.com/decks/${deck.id}?powered_by=archonMatrixDiscord) **•** [Burger Tokens](https://burgertokens.com/pages/keyforge-deck-analyzer?deck=${deck.id}&powered_by=archonMatrixDiscord)`)
+			.addField(houses, `[Official](https://www.keyforgegame.com/deck-details/${deck.id}?powered_by=archonMatrixDiscord) **•** [KeyForge Compendium](https://keyforge-compendium.com/decks/${deck.id}?powered_by=archonMatrixDiscord) **•** [Burger Tokens](https://burgertokens.com/pages/keyforge-deck-analyzer?deck=${deck.id}&powered_by=archonMatrixDiscord) **•** [Decks of KeyForge](https://decksofkeyforge.com/decks/${deck.id}?powered_by=archonMatrixDiscord)`)
 			.addField(deckADHD ? deckADHD : `ADHD unavailable, register https://keyforge-compendium.com/decks/${deck.id}?powered_by=archonMatrixDiscord`, Object.keys(cardStats.card_type).map(type => `${type}: ${cardStats.card_type[type]}`).join(' **•** '))
 			.addField(rarity + ', ' + mavericks, `Data fetch ${new Date()}`)
 			.setImage(`https://keyforge-compendium.com/decks/${deck.id}/image.png`)

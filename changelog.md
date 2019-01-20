@@ -1,3 +1,5 @@
+#1.1.1
+    added DOK link
 #1.1.0
     removed asyncforeach for map() and Promise.all()
 #1.0.11
