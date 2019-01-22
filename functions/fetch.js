@@ -67,11 +67,10 @@ const fetchDoK = (deckID) => {
 		axios.get(`${dokAPI}${deckID}`)
 			.then(response => {
 				if (response.data) {
-					const dokStats = response.data.deck,
-						sas = `${dokStats.sasRating} SAS = ${dokStats.cardsRating} Card Rating + ${dokStats.synergyRating} Synergy - ${dokStats.antisynergyRating} Antisynergy`,
-						deckAERC = `A: ${dokStats.expectedAmber} (${aveAERC.a_rating}) E: ${dokStats.amberControl} (${aveAERC.e_rating}) R: ${dokStats.artifactControl} (${aveAERC.r_rating}) C: ${dokStats.creatureControl} (${aveAERC.c_rating})`;
-					console.log(response.data.deck);
-					resolve({sas: sas, deckAERC: deckAERC});
+					const {amberControl: A, expectedAmber: E, artifactControl: R, creatureControl: C, sasRating, cardsRating, synergyRating, antisynergyRating} = response.data.deck,
+						sas = `${sasRating} SAS = ${cardsRating} + ${synergyRating} - ${antisynergyRating} (Card Rating + Synergy + Antisynergy)`,
+						deckAERC = `A: ${A} (${A - aveAERC.a_rating}) • E: ${E} (${E - aveAERC.e_rating}) • R: ${R} (${R - aveAERC.r_rating}) • C: ${C} (${C - aveAERC.c_rating})`;
+					resolve({sas, deckAERC});
 				} else resolve([false, false]);
 			}).catch(console.error);
 	});
