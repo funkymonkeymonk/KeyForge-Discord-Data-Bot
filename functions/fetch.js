@@ -7,6 +7,7 @@ const _ = require('lodash');
 const path = require('../config').path;
 const deckSearchAPI = require('../config').deckSearchAPI;
 const kfcAPI = require('../config').kfcAPI;
+const dokAPI = require('../config').dokAPI;
 
 const fetchDeck = (name) => {
 	return new Promise(resolve => {
@@ -60,6 +61,22 @@ const fetchDeckADHD = (deckID) => {
 	});
 };
 
+const fetchDoK = (deckID) => {
+	return new Promise(resolve => {
+		const aveAERC = {a_rating: 7, e_rating: 20, r_rating: 1, c_rating: 13};
+		axios.get(`${dokAPI}${deckID}`)
+			.then(response => {
+				if (response.data) {
+					const dokStats = response.data.deck,
+						sas = `${dokStats.sasRating} SAS = ${dokStats.cardsRating} Card Rating + ${dokStats.synergyRating} Synergy - ${dokStats.antisynergyRating} Antisynergy`,
+						deckAERC = `A: ${dokStats.expectedAmber} (${aveAERC.a_rating}) E: ${dokStats.amberControl} (${aveAERC.e_rating}) R: ${dokStats.artifactControl} (${aveAERC.r_rating}) C: ${dokStats.creatureControl} (${aveAERC.c_rating})`;
+					console.log(response.data.deck);
+					resolve({sas: sas, deckAERC: deckAERC});
+				} else resolve([false, false]);
+			}).catch(console.error);
+	});
+};
+
 const fetchFAQ = (card_number, search) => {
 	return new Promise(resolve => {
 		axios.get(`${kfcAPI}cards/${card_number}.json`)
@@ -77,5 +94,6 @@ const fetchFAQ = (card_number, search) => {
 exports.fetchDeck = fetchDeck;
 exports.fetchCard = fetchCard;
 exports.fetchDeckADHD = fetchDeckADHD;
+exports.fetchDoK = fetchDoK;
 exports.fetchFAQ = fetchFAQ;
 exports.fetchUnknownCard = fetchUnknownCard;
