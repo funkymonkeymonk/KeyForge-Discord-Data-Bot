@@ -1,15 +1,10 @@
-const cards = require('../data/');
-const new_cards = require('../data/new_cards');
-const all_cards = require('../data/all_cards');
-const axios = require('axios');
-const fs = require('fs');
-const _ = require('lodash');
-const path = require('../config').path;
-const deckSearchAPI = require('../config').deckSearchAPI;
-const kfcAPI = require('../config').kfcAPI;
-const dokAPI = require('../config').dokAPI;
+import axios from 'axios';
+import fs from 'fs';
+import _ from 'lodash';
+import {deckSearchAPI, dokAPI, kfcAPI, path} from '../config'
+import {all_cards, cards, new_cards} from '../data/index';
 
-const fetchDeck = (name) => {
+export const fetchDeck = (name) => {
 	return new Promise(resolve => {
 		axios.get(encodeURI(deckSearchAPI + '?search=' + name))
 			.then(async response => {
@@ -24,7 +19,7 @@ const fetchDeck = (name) => {
 	});
 };
 
-const fetchCard = (name, lang) => {
+export const fetchCard = (name, lang) => {
 	let final;
 	final = cards[lang].find(card => card.card_title.toLowerCase() === name);
 	if (final) return final;
@@ -36,7 +31,7 @@ const fetchCard = (name, lang) => {
 	return final;
 };
 
-const fetchUnknownCard = async (cardId, deckId) => {
+export const fetchUnknownCard = async (cardId, deckId) => {
 	console.log(`${cardId} not found, fetching from the man`);
 	const fetchedCards = await axios.get(`${deckSearchAPI}${deckId}/?links=cards`);
 	const card = fetchedCards.data._linked.cards.find(o => o.id === cardId);
@@ -49,7 +44,7 @@ const fetchUnknownCard = async (cardId, deckId) => {
 	return card;
 };
 
-const fetchDeckADHD = (deckID) => {
+export const fetchDeckADHD = (deckID) => {
 	return new Promise(resolve => {
 		const aveADHD = {a_rating: 17.57, b_rating: 18.28, e_rating: 7.58, c_rating: 5.51};
 		axios.get(`${kfcAPI}decks/${deckID}.json`)
@@ -61,7 +56,7 @@ const fetchDeckADHD = (deckID) => {
 	});
 };
 
-const fetchDoK = (deckID) => {
+export const fetchDoK = (deckID) => {
 	return new Promise(resolve => {
 		const aveAERC = {a_rating: 7, e_rating: 20, r_rating: 1, c_rating: 13};
 		axios.get(`${dokAPI}${deckID}`)
@@ -76,7 +71,7 @@ const fetchDoK = (deckID) => {
 	});
 };
 
-const fetchFAQ = (card_number, search) => {
+export const fetchFAQ = (card_number, search) => {
 	return new Promise(resolve => {
 		axios.get(`${kfcAPI}cards/${card_number}.json`)
 			.then(response => {
@@ -89,10 +84,3 @@ const fetchFAQ = (card_number, search) => {
 			}).catch(console.error)
 	});
 };
-
-exports.fetchDeck = fetchDeck;
-exports.fetchCard = fetchCard;
-exports.fetchDeckADHD = fetchDeckADHD;
-exports.fetchDoK = fetchDoK;
-exports.fetchFAQ = fetchFAQ;
-exports.fetchUnknownCard = fetchUnknownCard;

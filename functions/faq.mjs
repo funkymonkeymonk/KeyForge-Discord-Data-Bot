@@ -1,11 +1,9 @@
-const main = require('../index');
-const Discord = require('discord.js');
-const fetchCard = require('./fetch').fetchCard;
-const fetchFAQ = require('./fetch').fetchFAQ;
-const path = require('../config').path;
-const emoji = require('./emoji').emoji;
+import Discord from 'discord.js';
+import {path} from '../config';
+import {sendMessage} from '../discord'
+import {emoji, fetchCard, fetchFAQ} from './index';
 
-const faq = async (msg, params, client, lang) => {
+export const faq = async (msg, params, client, lang) => {
 	const data = fetchCard(params.length > 1 ? params.slice(0, -1).join(' ') : params.join(' '), lang);
 	const embed = new Discord.RichEmbed();
 	if (data) {
@@ -28,7 +26,5 @@ const faq = async (msg, params, client, lang) => {
 		embed.addField('Data Provided by', `[KeyForge Compendium](https://keyforge-compendium.com/?powered_by=archonMatrixDiscord)`);
 	} else embed.setColor('FF0000').setDescription(`Card: ${params.join(' ')}: not found!`);
 
-	main.sendMessage(msg, {embed});
+	sendMessage(msg, {embed});
 };
-
-exports.faq = faq;

@@ -1,12 +1,12 @@
-const knownCommands = require('./functions/index');
-const commandPrefix = require('./config').prefix;
+import {prefix} from '../config';
+import {knownCommands} from './index';
 
 // Called every time a message comes in:
-const onMessage = (msg, client) => {
+export const onMessage = (msg, client) => {
 	if (msg.author.bot) return; // Ignore messages from the bot
 
 	// This isn't a command since it has no prefix:
-	if (!msg.content.includes(commandPrefix) && !msg.content.match(/[\[\]{}]/g)) return;
+	if (!msg.content.includes(prefix) && !msg.content.match(/[\[\]{}]/g)) return;
 	let params = [], commandName, lang = 'en', message = msg.content.toLowerCase();
 
 	if (message.split(' ').some(a => a.startsWith('-'))) {
@@ -14,9 +14,9 @@ const onMessage = (msg, client) => {
 		message = message.split(' ').filter(a => !a.startsWith('-')).join(' ');
 	}
 
-	if (message.includes(commandPrefix)) {
-		if (message.startsWith(commandPrefix)) params = message.substr(1).split(' ');
-		else params = message.split(commandPrefix)[1].split(' ');
+	if (message.includes(prefix)) {
+		if (message.startsWith(prefix)) params = message.substr(1).split(' ');
+		else params = message.split(prefix)[1].split(' ');
 		commandName = params[0].toLowerCase();
 		params = params.splice(1);
 	} else if (message.match(/[\[\]]/g)) {
@@ -38,9 +38,6 @@ const onMessage = (msg, client) => {
 			break;
 		case 'f':
 			commandName = 'faq';
-			break;
-		case 'r':
-			commandName = 'rule';
 			break;
 		case 'v':
 		case 'ver':
@@ -64,7 +61,4 @@ const onMessage = (msg, client) => {
 };
 
 // Called every time the bot connects to Twitch chat:
-const onReady = client => console.log(`Logged in as ${client.user.username}!`);
-
-exports.onMessage = onMessage;
-exports.onReady = onReady;
+export const onReady = client => console.log(`Logged in as ${client.user.username}!`);

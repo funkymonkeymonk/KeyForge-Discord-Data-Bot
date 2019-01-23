@@ -1,11 +1,8 @@
-const main = require('../index');
-const Discord = require('discord.js');
-const fetchDeck = require('./fetch').fetchDeck;
-const fetchDeckADHD = require('./fetch').fetchDeckADHD;
-const fetchDoK = require('./fetch').fetchDoK;
-const emoji = require('./emoji').emoji;
+import Discord from 'discord.js';
+import {sendMessage} from '../discord'
+import {emoji, fetchDeck, fetchDeckADHD, fetchDoK} from './index'
 
-const deck = async (msg, params, client) => {
+export const deck = async (msg, params, client) => {
 	const [deck, cards] = await fetchDeck(params.join('+'));
 	const embed = new Discord.RichEmbed();
 	if (deck) {
@@ -28,10 +25,10 @@ const deck = async (msg, params, client) => {
 						`[Official](https://www.keyforgegame.com/deck-details/${deck.id}?powered_by=archonMatrixDiscord) **•** [KeyForge Compendium](https://keyforge-compendium.com/decks/${deck.id}?powered_by=archonMatrixDiscord) **•** [Burger Tokens](https://burgertokens.com/pages/keyforge-deck-analyzer?deck=${deck.id}&powered_by=archonMatrixDiscord) **•** [Decks of KeyForge](https://decksofkeyforge.com/decks/${deck.id}?powered_by=archonMatrixDiscord)`)
 					.setFooter(`Data fetch ${new Date()}`)
 					.setImage(`https://keyforge-compendium.com/decks/${deck.id}/image.png`);
-				main.sendMessage(msg, {embed});
+				sendMessage(msg, {embed});
 			});
 
-	} else main.sendMessage(msg, embed.setColor('FF0000').setDescription(`Deck - ${params.join(' ')}: not found!`));
+	} else sendMessage(msg, embed.setColor('FF0000').setDescription(`Deck - ${params.join(' ')}: not found!`));
 };
 
 const getHouses = (houses, client) => {
@@ -59,5 +56,3 @@ const getCardStats = (cards) => {
 		is_maverick: cards.filter(card => card.is_maverick).length,
 	};
 };
-
-exports.deck = deck;

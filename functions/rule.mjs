@@ -1,9 +1,9 @@
-const main = require('../index');
-const Discord = require('discord.js');
-const rules = require('../data/rules');
-const _ = require('lodash');
+import Discord from 'discord.js';
+import _ from 'lodash';
+import {rules} from '../data/index';
+import {sendMessage} from '../discord'
 
-const rule = (msg, params) => {
+export const rule = (msg, params) => {
 	let i = _.findIndex(Object.keys(rules), term => term === params.join(' ') || term.startsWith(params.join(' ')));
 	const key = Object.keys(rules)[i];
 	let embed = new Discord.RichEmbed();
@@ -15,7 +15,5 @@ const rule = (msg, params) => {
 	}
 	else embed.setColor('FF0000').setDescription(`Rule: ${params.join(' ')} not found`);
 
-	main.sendMessage(msg, {embed});
+	sendMessage(msg, {embed});
 };
-
-exports.rule = rule;
