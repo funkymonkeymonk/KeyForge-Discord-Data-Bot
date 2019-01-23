@@ -1,9 +1,10 @@
-import Discord from 'discord.js';
-import _ from 'lodash';
-import {sendMessage} from '../discord'
-import {buildAttachment, fetchDeck} from './index';
+const main = require('../index');
+const Discord = require('discord.js');
+const fetchDeck = require('./fetch').fetchDeck;
+const buildAttachment = require('./buildAttachment').buildAttachment;
+const _ = require('lodash');
 
-export const randomHand = async (msg, params, client, lang) => {
+const randomHand = async (msg, params, client, lang) => {
 	let [deck, cards] = await fetchDeck(params.join('+'));
 	const embed = new Discord.RichEmbed();
 	if (deck) {
@@ -20,5 +21,7 @@ export const randomHand = async (msg, params, client, lang) => {
 			.setImage(`attachment://${name}`);
 	} else embed.setColor('FF0000').setDescription(`Deck - ${params.join(' ')}: not found!`);
 
-	sendMessage(msg, {embed});
+	main.sendMessage(msg, {embed});
 };
+
+exports.randomHand = randomHand;

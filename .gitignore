@@ -60,11 +60,11 @@ typings/
 # next.js build output
 .next
 
-config.mjs
+config.js
 node_modules/
 .DS_Store
 data/*
 .idea
 card_images
-fetchImages.mjs
+fetchImages.js
 OLD

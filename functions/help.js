@@ -1,8 +1,8 @@
-import Discord from 'discord.js';
-import {prefix} from '../config';
-import {sendMessage} from '../discord'
+const main = require('../index');
+const Discord = require('discord.js');
+const prefix = require('../config').prefix;
 
-export const help = (msg, params) => {
+const help = (msg, params) => {
 	const embed = new Discord.RichEmbed()
 		.setTitle('Help')
 		.setColor('2D7C2F');
@@ -45,5 +45,7 @@ export const help = (msg, params) => {
 				.addField('Other Info', ' [KeyForge Discord Server](https://discordapp.com/invite/PcTGhr9) \n[KeyForge](https://www.fantasyflightgames.com/en/products/keyforge/?powered_by=archonMatrixDiscord) by Fantasy Flight Game');
 			break;
 	}
-	sendMessage(msg, {embed});
+	main.sendMessage(msg, {embed});
 };
+
+exports.help = help;

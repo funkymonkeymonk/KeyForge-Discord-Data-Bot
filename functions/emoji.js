@@ -1,4 +1,4 @@
-export const emoji = (str, client) => {
+const emoji = (str, client) => {
 	return new Promise(resolve => {
 		client.shard.broadcastEval(`(${findGuild}).call(this,'${str}')`)
 			.then(emojiArray => resolve(emojiArray.find(emoji => emoji)))
@@ -12,3 +12,5 @@ const findGuild = (emojiID) => {
 	const emoji = guild.emojis.find(val => val.name === emojiID);
 	return emoji ? emoji.toString() : emojiID;
 };
+
+exports.emoji = emoji;

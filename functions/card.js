@@ -1,9 +1,9 @@
-import Discord from 'discord.js';
-import {path} from '../config';
-import {sendMessage} from '../discord'
-import {fetchCard} from './index'
+const main = require('../index');
+const Discord = require('discord.js');
+const fetchCard = require('./fetch').fetchCard;
+const path = require('../config').path;
 
-export const card = async (msg, params, client, lang) => {
+const card = async (msg, params, client, lang) => {
 	const data = fetchCard(params.join(' '), lang);
 	const embed = new Discord.RichEmbed();
 	if (data) {
@@ -16,5 +16,7 @@ export const card = async (msg, params, client, lang) => {
 			.setFooter(`Link provided by KeyForge Compendium`);
 	} else embed.setColor('FF0000').setDescription(`Card: ${params.join(' ')}: not found!`);
 
-	sendMessage(msg, {embed});
+	main.sendMessage(msg, {embed});
 };
+
+exports.card = card;

@@ -1,8 +1,8 @@
-import Discord from 'discord.js';
-import _ from 'lodash';
-import {sendMessage} from '../discord'
+const main = require('../index');
+const Discord = require('discord.js');
+const _ = require('lodash');
 
-export const stats = async (msg, params, client) => {
+const stats = async (msg, params, client) => {
 	let stats = `Currently there are ${client.shard.count} shards.\n`;
 	await client.shard.broadcastEval('this.guilds.size')
 		.then(results => stats += `Currently on ${results.reduce((prev, val) => prev + val, 0)} servers.\n`).catch(console.error);
@@ -12,7 +12,7 @@ export const stats = async (msg, params, client) => {
 		.setTitle(`${client.user.username} Stats`)
 		.setColor('FFFF00')
 		.setDescription(stats);
-	sendMessage(msg, {embed});
+	main.sendMessage(msg, {embed});
 };
 
 const buildMemberList = () => {
@@ -20,3 +20,5 @@ const buildMemberList = () => {
 	this.guilds.forEach(guild => users += +guild.memberCount);
 	return users;
 };
+
+exports.stats = stats;

@@ -1,8 +1,9 @@
-import Discord from 'discord.js'
-import {sendMessage} from '../discord'
-import {buildAttachment, fetchCard} from './index'
+const main = require('../index');
+const Discord = require('discord.js');
+const fetchCard = require('./fetch').fetchCard;
+const buildAttachment = require('./buildAttachment').buildAttachment;
 
-export const brackets = async (msg, params, client, lang) => {
+const brackets = async (msg, params, client, lang) => {
 	params = params.slice(0, 5);
 	//fetch cards data
 	const cards = params.map(card => fetchCard(card, lang));
@@ -19,5 +20,7 @@ export const brackets = async (msg, params, client, lang) => {
 			.setFooter(`Links provided by KeyForge Compendium`);
 	} else embed.setColor('FF0000').setDescription(error);
 
-	sendMessage(msg, {embed});
+	main.sendMessage(msg, {embed});
 };
+
+exports.brackets = brackets;
