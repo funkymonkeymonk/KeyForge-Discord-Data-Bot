@@ -12,8 +12,8 @@ const faq = async (msg, params, client, lang) => {
 		const link = `https://keyforge-compendium.com/cards/${data.card_number}?powered_by=archonMatrixDiscord`,
 			searchTerm = params.length > 1 ? params.slice(-1).join() : '',
 			faqs = await fetchFAQ(data.card_number, searchTerm),
-			house = await emoji(data.house.toLowerCase(), client),
-			rarity = await emoji(data.rarity.toLowerCase(), client),
+			house = emoji(data.house.toLowerCase()),
+			rarity = emoji(data.rarity.toLowerCase()),
 			title = `${data.card_number}.png`,
 			attachment = new Discord.Attachment(`${path}card_images/${lang}/${data.card_number}.png`, title);
 		embed.setColor('ffa500')

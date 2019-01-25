@@ -1,11 +1,11 @@
 const main = require('../index');
-const pakeage = require('../package');
+const versionNumber = require('../package').version;
 const Discord = require('discord.js');
 
 const version = (msg) => {
 	const embed = new Discord.RichEmbed()
 		.setColor('777777')
-		.setDescription(`**Version:** ${pakeage.version}`);
+		.setDescription(`**Version:** ${versionNumber}`);
 	main.sendMessage(msg, {embed});
 };
 

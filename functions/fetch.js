@@ -56,7 +56,7 @@ const fetchDeckADHD = (deckID) => {
 			.then(response => {
 				if (response.data) {
 					resolve(`${Object.keys(aveADHD).sort().map(type => `${_.toUpper(type.slice(0, 1))}: ${response.data[type].toFixed(2)} (${(response.data[type] - aveADHD[type]).toFixed(2)})`).join(' • ')}`);
-				} else resolve(false);
+				} else resolve(`ADHD unavailable, register https://keyforge-compendium.com/decks/${deckID}?powered_by=archonMatrixDiscord`);
 			}).catch(console.error);
 	});
 };
