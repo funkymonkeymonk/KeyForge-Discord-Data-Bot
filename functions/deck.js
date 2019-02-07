@@ -9,18 +9,16 @@ const deck = async (msg, params) => {
 	const [deck, cards] = await fetchDeck(params.join('+'));
 	const embed = new Discord.RichEmbed();
 	if (deck) {
-		const houses = deck._links.houses.map(house => emoji(house.toLowerCase())).join(' **•** '),
-			power = `**•** ${deck.power_level} ${emoji('power')} **•** ${deck.chains} ${emoji('chains')}`,
-			cardStats = getCardStats(cards),
-			cardTypes = Object.keys(cardStats.card_type).map(type => `${type}: ${cardStats.card_type[type]}`).join(' **•** '),
-			mavericks = `${emoji('maverick')}: ${cardStats.is_maverick}`,
-			rarity = Object.keys(cardStats.rarity).map(type => `${emoji(type.toLowerCase())}: ${cardStats.rarity[type]}`).join(', '),
-			deckADHD = fetchDeckADHD(deck.id),
-			dokStats = fetchDoK(deck.id),
-			image = `https://keyforge-compendium.com/decks/${deck.id}/image.png`,
-			links = `[Official](https://www.keyforgegame.com/deck-details/${deck.id}?powered_by=archonMatrixDiscord) **•** [KeyForge Compendium](https://keyforge-compendium.com/decks/${deck.id}?powered_by=archonMatrixDiscord) **•** [Burger Tokens](https://burgertokens.com/pages/keyforge-deck-analyzer?deck=${deck.id}&powered_by=archonMatrixDiscord) **•** [Decks of KeyForge](https://decksofkeyforge.com/decks/${deck.id}?powered_by=archonMatrixDiscord)`;
+		const deckADHD = fetchDeckADHD(deck.id), dokStats = fetchDoK(deck.id);
+		Promise.all([deckADHD, dokStats]).then(([deckADHD, dokStats]) => {
+			const houses = deck._links.houses.map(house => emoji(house.toLowerCase())).join(' **•** '),
+				power = ` **•** ${deck.power_level} ${emoji('power')} **•** ${deck.chains} ${emoji('chains')}`,
+				cardStats = getCardStats(cards),
+				cardTypes = Object.keys(cardStats.card_type).map(type => `${type}: ${cardStats.card_type[type]}`).join(' **•** '),
+				mavericks = `${emoji('maverick')}: ${cardStats.is_maverick}`,
+				rarity = Object.keys(cardStats.rarity).map(type => `${emoji(type.toLowerCase())}: ${cardStats.rarity[type]}`).join(', '),
+				links = `[Official](https://www.keyforgegame.com/deck-details/${deck.id}?powered_by=archonMatrixDiscord) **•** [KeyForge Compendium](https://keyforge-compendium.com/decks/${deck.id}?powered_by=archonMatrixDiscord) **•** [Burger Tokens](https://burgertokens.com/pages/keyforge-deck-analyzer?deck=${deck.id}&powered_by=archonMatrixDiscord) **•** [Decks of KeyForge](https://decksofkeyforge.com/decks/${deck.id}?powered_by=archonMatrixDiscord)`;
 
-		Promise.all([deckADHD, dokStats]).then(() => {
 			embed.setColor('178110')
 				.setTitle(deck.name)
 				.addField(houses + power, rarity + ', ' + mavericks)
@@ -28,9 +26,9 @@ const deck = async (msg, params) => {
 				.addField(dokStats.sas, dokStats.deckAERC)
 				.addField("Links", links)
 				.setFooter(`Data fetch ${new Date()}`)
-				.setImage(image);
+				.setImage(`https://keyforge-compendium.com/decks/${deck.id}/image.png`);
 			main.sendMessage(msg, {embed});
-		});
+		}).catch(console.error);
 	} else main.sendMessage(msg, embed.setColor('FF0000').setDescription(`Deck - ${params.join(' ')}: not found!`));
 };
 

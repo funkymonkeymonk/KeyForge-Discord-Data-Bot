@@ -1,3 +1,8 @@
+# 1.1.5
+    mav in !RH
+# 1.1.4
+    KFC auth
+    fix to double check for closed brackets
 # 1.1.3 
     local emoji
 # 1.1.2

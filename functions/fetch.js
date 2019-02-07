@@ -8,6 +8,7 @@ const path = require('../config').path;
 const deckSearchAPI = require('../config').deckSearchAPI;
 const kfcAPI = require('../config').kfcAPI;
 const dokAPI = require('../config').dokAPI;
+const KFCAuth = require('../config').KFCAuth;
 
 const fetchDeck = (name) => {
 	return new Promise(resolve => {
@@ -52,12 +53,12 @@ const fetchUnknownCard = async (cardId, deckId) => {
 const fetchDeckADHD = (deckID) => {
 	return new Promise(resolve => {
 		const aveADHD = {a_rating: 17.57, b_rating: 18.28, e_rating: 7.58, c_rating: 5.51};
-		axios.get(`${kfcAPI}decks/${deckID}.json`)
+		axios.get(`${kfcAPI}decks/${deckID}.json`, KFCAuth)
 			.then(response => {
 				if (response.data) {
 					resolve(`${Object.keys(aveADHD).sort().map(type => `${_.toUpper(type.slice(0, 1))}: ${response.data[type].toFixed(2)} (${(response.data[type] - aveADHD[type]).toFixed(2)})`).join(' • ')}`);
 				} else resolve(`ADHD unavailable, register https://keyforge-compendium.com/decks/${deckID}?powered_by=archonMatrixDiscord`);
-			}).catch(console.error);
+			}).catch(() => resolve(`ADHD not Found! KFC is non-responsive`));
 	});
 };
 
@@ -71,14 +72,14 @@ const fetchDoK = (deckID) => {
 						sas = `${sasRating} SAS = ${cardsRating} + ${synergyRating} - ${antisynergyRating} (Card Rating + Synergy + Antisynergy)`,
 						deckAERC = `A: ${A} (${A - aveAERC.a_rating}) • E: ${E} (${E - aveAERC.e_rating}) • R: ${R} (${R - aveAERC.r_rating}) • C: ${C} (${C - aveAERC.c_rating})`;
 					resolve({sas, deckAERC});
-				} else resolve([false, false]);
-			}).catch(console.error);
+				} else resolve(['Unable to Retrieve SAS', 'Unable to Retrieve AERC']);
+			}).catch(() => resolve(['Unable to Retrieve SAS, DoK non-responsive', 'Unable to Retrieve AERC, DoK non-responsive']));
 	});
 };
 
 const fetchFAQ = (card_number, search) => {
 	return new Promise(resolve => {
-		axios.get(`${kfcAPI}cards/${card_number}.json`)
+		axios.get(`${kfcAPI}cards/${card_number}.json`, KFCAuth)
 			.then(response => {
 				const data = _.get(response, 'data.faqs', []),
 					final = data.map(faq => {

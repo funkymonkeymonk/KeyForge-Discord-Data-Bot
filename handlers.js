@@ -1,5 +1,6 @@
 const knownCommands = require('./functions/index');
 const commandPrefix = require('./config').prefix;
+const version = require('./package').version;
 
 // Called every time a message comes in:
 const onMessage = (msg, client) => {
@@ -19,11 +20,11 @@ const onMessage = (msg, client) => {
 		else params = message.split(commandPrefix)[1].split(' ');
 		commandName = params[0].toLowerCase();
 		params = params.splice(1);
-	} else if (message.match(/[\[\]]/g)) {
+	} else if (message.match(/]/g) && message.match(/\[/g)) {
 		let parse = message.split('[');
 		parse.forEach(sub => sub.includes(']') && params.push(sub.split(']')[0]));
 		commandName = 'brackets';
-	} else if (message.match(/[{}]/g)) {
+	} else if (message.match(/}/g) && message.match(/{/g)) {
 		let parse = message.split('{');
 		parse.forEach(sub => sub.includes('}') && params.push(sub.split('}')[0]));
 		commandName = 'deck';
@@ -64,7 +65,10 @@ const onMessage = (msg, client) => {
 };
 
 // Called every time the bot connects to Twitch chat:
-const onReady = client => console.log(`Logged in as ${client.user.username}!`);
+const onReady = client => {
+	console.log(`Logged in as ${client.user.username}!`);
+	console.log(`Version: ${version}`);
+};
 
 exports.onMessage = onMessage;
 exports.onReady = onReady;
