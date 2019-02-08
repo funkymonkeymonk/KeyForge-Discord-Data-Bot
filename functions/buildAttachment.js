@@ -18,8 +18,8 @@ const buildAttachment = async (data, name, lang) => {
 					const canvasMav = createCanvas(300, 420),
 						ctxMav = canvasMav.getContext('2d');
 					ctxMav.drawImage(cardMav, 0, 0);
-					ctxMav.drawImage(house, 12, 12, 65, 65);
-					ctxMav.drawImage(maverick, 232, 22, 45, 35);
+					ctxMav.drawImage(house, 12, 11, 63, 63);
+					ctxMav.drawImage(maverick, 232, 11, 63, 63);
 					resolve(canvasMav);
 				});
 			})

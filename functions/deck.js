@@ -12,7 +12,7 @@ const deck = async (msg, params) => {
 		const deckADHD = fetchDeckADHD(deck.id), dokStats = fetchDoK(deck.id);
 		Promise.all([deckADHD, dokStats]).then(([deckADHD, dokStats]) => {
 			const houses = deck._links.houses.map(house => emoji(house.toLowerCase())).join(' **•** '),
-				power = ` **•** ${deck.power_level} ${emoji('power')} **•** ${deck.chains} ${emoji('chains')}`,
+				power = ` **•** ${deck.power_level} ${emoji('power')} **•** ${deck.chains} ${emoji('chains')} **•** ${deck.wins}W/${deck.losses}L`,
 				cardStats = getCardStats(cards),
 				cardTypes = Object.keys(cardStats.card_type).map(type => `${type}: ${cardStats.card_type[type]}`).join(' **•** '),
 				mavericks = `${emoji('maverick')}: ${cardStats.is_maverick}`,
