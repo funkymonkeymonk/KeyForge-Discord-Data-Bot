@@ -15,7 +15,7 @@ const faq = async (msg, params, client, lang) => {
 			house = emoji(data.house.toLowerCase()),
 			rarity = emoji(data.rarity.toLowerCase()),
 			title = `${data.card_number}.png`,
-			attachment = new Discord.Attachment(`${path}card_images/${lang}/${data.card_number}.png`, title);
+			attachment = new Discord.Attachment(`${path}card_images/${lang}/${data.expansion}/${data.card_number}.png`, title);
 		embed.setColor('ffa500')
 			.setTitle(`${data.card_title} #${data.card_number}`)
 			.attachFile(attachment)

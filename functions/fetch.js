@@ -15,13 +15,30 @@ const fetchDeck = (name) => {
 		axios.get(encodeURI(deckSearchAPI + '?search=' + name))
 			.then(async response => {
 				const deck = _.get(response, 'data.data[0]', false);
-				const cardList = _.get(deck, 'cards', []);
-				const cards = cardList.map(async card => {
-					const data = all_cards.find(o => o.id === card);
-					return data ? data : await fetchUnknownCard(card, deck.id).catch(console.error);
-				});
-				Promise.all(cards).then(finalCards => resolve([deck, finalCards]));
+				const cards = await buildCardList(_.get(deck, 'cards', []));
+				resolve([deck, cards]);
 			}).catch(console.error);
+	});
+};
+
+const fetchDeckBasic = (id) => {
+	return new Promise(resolve => {
+		axios.get(encodeURI(deckSearchAPI + id))
+			.then(async response => {
+				const deck = _.get(response, 'data.data', false);
+				deck.cards = await buildCardList(_.get(deck, 'cards', []));
+				resolve(deck);
+			}).catch(console.error);
+	});
+};
+
+const buildCardList = (cardList) => {
+	return new Promise(resolve => {
+		const cards = cardList.map(async card => {
+			const data = all_cards.find(o => o.id === card);
+			return data ? data : await fetchUnknownCard(card, deck.id).catch(console.error);
+		});
+		Promise.all(cards).then(cards => resolve(cards))
 	});
 };
 
@@ -56,9 +73,17 @@ const fetchDeckADHD = (deckID) => {
 		axios.get(`${kfcAPI}decks/${deckID}.json`, KFCAuth)
 			.then(response => {
 				if (response.data) {
-					resolve(`${Object.keys(aveADHD).sort().map(type => `${_.toUpper(type.slice(0, 1))}: ${response.data[type].toFixed(2)} (${(response.data[type] - aveADHD[type]).toFixed(2)})`).join(' • ')}`);
+					resolve(`${Object.keys(aveADHD).sort().map(type => `${_.toUpper(type.slice(0, 1))}: ${response.data[type].toFixed(1)} (${(response.data[type] - aveADHD[type]).toFixed(1)})`).join(' • ')}`);
 				} else resolve(`ADHD unavailable, register https://keyforge-compendium.com/decks/${deckID}?powered_by=archonMatrixDiscord`);
 			}).catch(() => resolve(`ADHD not Found! KFC is non-responsive`));
+	});
+};
+
+const fetchRandomDecks = (amount) => {
+	return new Promise(resolve => {
+		axios.get(`${kfcAPI}decks/random/${amount}`, KFCAuth)
+			.then(response => resolve(response.data))
+			.catch(() => resolve(false));
 	});
 };
 
@@ -68,8 +93,8 @@ const fetchDoK = (deckID) => {
 		axios.get(`${dokAPI}${deckID}`)
 			.then(response => {
 				if (response.data) {
-					const {amberControl: A, expectedAmber: E, artifactControl: R, creatureControl: C, sasRating, cardsRating, synergyRating, antisynergyRating} = response.data.deck,
-						sas = `${sasRating} SAS = ${cardsRating} + ${synergyRating} - ${antisynergyRating} (Card Rating + Synergy + Antisynergy)`,
+					const {amberControl: A, expectedAmber: E, artifactControl: R, creatureControl: C, sasRating} = response.data.deck,
+						sas = `${sasRating} SAS`,
 						deckAERC = `A: ${A} (${A - aveAERC.a_rating}) • E: ${E} (${E - aveAERC.e_rating}) • R: ${R} (${R - aveAERC.r_rating}) • C: ${C} (${C - aveAERC.c_rating})`;
 					resolve({sas, deckAERC});
 				} else resolve(['Unable to Retrieve SAS', 'Unable to Retrieve AERC']);
@@ -92,8 +117,10 @@ const fetchFAQ = (card_number, search) => {
 };
 
 exports.fetchDeck = fetchDeck;
+exports.fetchDeckBasic = fetchDeckBasic;
 exports.fetchCard = fetchCard;
 exports.fetchDeckADHD = fetchDeckADHD;
 exports.fetchDoK = fetchDoK;
 exports.fetchFAQ = fetchFAQ;
 exports.fetchUnknownCard = fetchUnknownCard;
+exports.fetchRandomDecks = fetchRandomDecks;

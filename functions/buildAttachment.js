@@ -8,7 +8,7 @@ const buildAttachment = async (data, name, lang) => {
 	const canvas = createCanvas(250 * data.length + 5 * data.length, 350);
 	const ctx = canvas.getContext('2d');
 	const imgArray = data.map(async card => {
-		if (!card.is_maverick) return await loadImage(`${path}card_images/${lang}/${card.card_number}.png`);
+		if (!card.is_maverick) return await loadImage(`${path}card_images/${lang}/${card.expansion}/${card.card_number}.png`);
 		else {
 			return new Promise(resolve => {
 				const cardMav = loadImage(`${path}card_images/${lang}/${card.card_number}.png`),
