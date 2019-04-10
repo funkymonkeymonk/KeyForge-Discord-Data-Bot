@@ -15,7 +15,7 @@ const fetchDeck = (name) => {
 		axios.get(encodeURI(deckSearchAPI + '?search=' + name))
 			.then(async response => {
 				const deck = _.get(response, 'data.data[0]', false);
-				const cards = await buildCardList(_.get(deck, 'cards', []));
+				const cards = await buildCardList(_.get(deck, 'cards', []), _.get(deck, 'id', ''));
 				resolve([deck, cards]);
 			}).catch(console.error);
 	});
@@ -26,17 +26,17 @@ const fetchDeckBasic = (id) => {
 		axios.get(encodeURI(deckSearchAPI + id))
 			.then(async response => {
 				const deck = _.get(response, 'data.data', false);
-				deck.cards = await buildCardList(_.get(deck, 'cards', []));
+				deck.cards = await buildCardList(_.get(deck, 'cards', []), _.get(deck, 'id', ''));
 				resolve(deck);
 			}).catch(console.error);
 	});
 };
 
-const buildCardList = (cardList) => {
+const buildCardList = (cardList, id) => {
 	return new Promise(resolve => {
 		const cards = cardList.map(async card => {
 			const data = all_cards.find(o => o.id === card);
-			return data ? data : await fetchUnknownCard(card, deck.id).catch(console.error);
+			return data ? data : await fetchUnknownCard(card, id).catch(console.error);
 		});
 		Promise.all(cards).then(cards => resolve(cards))
 	});
@@ -55,7 +55,7 @@ const fetchCard = (name, lang) => {
 };
 
 const fetchUnknownCard = async (cardId, deckId) => {
-	console.log(`${cardId} not found, fetching from the man`);
+	console.log(`${cardId} not found, fetching from the man from deck ${deckId}`);
 	const fetchedCards = await axios.get(`${deckSearchAPI}${deckId}/?links=cards`);
 	const card = fetchedCards.data._linked.cards.find(o => o.id === cardId);
 	if (!new_cards.find(o => o.id === cardId)) {

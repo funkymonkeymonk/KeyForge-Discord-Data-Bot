@@ -65,6 +65,6 @@ node_modules/
 .DS_Store
 data/*
 .idea
-card_images
+card_images/*
 fetchImages.js
 OLD
